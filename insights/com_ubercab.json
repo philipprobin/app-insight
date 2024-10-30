@@ -1,0 +1,271 @@
+{
+    "apps": [
+        {
+            "appId": "com.ubercab",
+            "insights": [
+                {
+                    "title": "Annoying Crashes",
+                    "amount": 5,
+                    "quotes": [
+                        "Uber is one of the best services but sometimes it not find the cab earlier.",
+                        "The app crashes often.",
+                        "I have had great experiences but I have also had instances where the app just shuts down.",
+                        "I had to cancel my rides twice because the app was crashing."
+                    ],
+                    "sentiments": [
+                        "FRUSTRATED",
+                        "DISAPPOINTED"
+                    ]
+                },
+                {
+                    "title": "Customer Support Issues",
+                    "amount": 6,
+                    "quotes": [
+                        "They don't have a live interactive customer care service.",
+                        "Getting in touch with customer support is nearly impossible.",
+                        "There is no transparency on charges and the support is nonexistent.",
+                        "I can't reach anyone and my statement said it's already paid for."
+                    ],
+                    "sentiments": [
+                        "ANGRY",
+                        "DISSATISFIED"
+                    ]
+                },
+                {
+                    "title": "High Prices Compared to Competitors",
+                    "amount": 4,
+                    "quotes": [
+                        "Always higher price than OLA.",
+                        "It's sad that Uber used to have many drivers in my area, now it's just prices going up.",
+                        "They charge a low amount when you accept then after trip they come back to charge your higher amount.",
+                        "Rates are reasonable but are always higher."
+                    ],
+                    "sentiments": [
+                        "DISAPPOINTED",
+                        "CONCERNED"
+                    ]
+                },
+                {
+                    "title": "Positive Driver Experiences",
+                    "amount": 14,
+                    "quotes": [
+                        "I have great experiences with each driver.",
+                        "He is a very good driver.",
+                        "My ride arrived on time and the driver was polite.",
+                        "Drivers are professional and friendly."
+                    ],
+                    "sentiments": [
+                        "HAPPY",
+                        "GRATEFUL"
+                    ]
+                },
+                {
+                    "title": "Inconsistent Navigation and Location Issues",
+                    "amount": 3,
+                    "quotes": [
+                        "Needs more accurate improvements while navigating local areas.",
+                        "The app is overall good but giving it one star rating since they have such a big engineering team and still don't have a feature to upload pictures.",
+                        "The location pin in the app could go incorrect, especially if you are in a new place."
+                    ],
+                    "sentiments": [
+                        "CONCERNED",
+                        "CONFUSED"
+                    ]
+                }
+            ]
+        },
+        {
+            "appId": "com.ubercab.driver",
+            "insights": [
+                {
+                    "title": "Poor Driver Support",
+                    "amount": 5,
+                    "quotes": [
+                        "Not able to connect support team.",
+                        "Support is poor and doesn't help with issues.",
+                        "Their policies leave drivers frustrated without proper support.",
+                        "Customer support is nonexistent when drivers need assistance."
+                    ],
+                    "sentiments": [
+                        "ANGRY",
+                        "DISAPPOINTED"
+                    ]
+                },
+                {
+                    "title": "Complicated Payment Issues",
+                    "amount": 8,
+                    "quotes": [
+                        "Uber promised zero commission but still deducts fees.",
+                        "Long waiting periods and driver earnings are drastically reduced.",
+                        "Commissions are getting higher and higher.",
+                        "The application is designed to benefit the service more than the drivers."
+                    ],
+                    "sentiments": [
+                        "FRUSTRATED",
+                        "DISAPPOINTED"
+                    ]
+                }
+            ]
+        },
+        {
+            "appId": "ee.mtakso.client",
+            "insights": [
+                {
+                    "title": "Convenience and Comfort",
+                    "amount": 7,
+                    "quotes": [
+                        "The best app.",
+                        "Safe drive.",
+                        "Excellent service and drivers.",
+                        "Good experience and timely service."
+                    ],
+                    "sentiments": [
+                        "HAPPY",
+                        "SATISFIED"
+                    ]
+                },
+                {
+                    "title": "Driver Performance Variability",
+                    "amount": 4,
+                    "quotes": [
+                        "Sometimes drivers are incompetent.",
+                        "They have great drivers, but some just don't follow the app's instructions.",
+                        "Drivers need better communication skills.",
+                        "Had a very bad experience with some drivers."
+                    ],
+                    "sentiments": [
+                        "CONFUSED",
+                        "DISAPPOINTED"
+                    ]
+                }
+            ]
+        },
+        {
+            "appId": "me.lyft.android",
+            "insights": [
+                {
+                    "title": "Excessive Pricing and Hidden Fees",
+                    "amount": 9,
+                    "quotes": [
+                        "They charge triple the upfront ride quote without notice.",
+                        "Prices have skyrocketed, making Lyft more expensive than Uber.",
+                        "It's usually cheaper, but not anymore.",
+                        "The estimated price isn’t the final price."
+                    ],
+                    "sentiments": [
+                        "ANGRY",
+                        "DISAPPOINTED"
+                    ]
+                },
+                {
+                    "title": "Contract and Customer Service Problems",
+                    "amount": 8,
+                    "quotes": [
+                        "Awful customer service.",
+                        "No response from support after multiple attempts.",
+                        "Drivers frequently cancel.",
+                        "I can't get in touch with customer service."
+                    ],
+                    "sentiments": [
+                        "FRUSTRATED",
+                        "DISAPPOINTED"
+                    ]
+                },
+                {
+                    "title": "Driver Quality",
+                    "amount": 5,
+                    "quotes": [
+                        "Every driver I've had is courteous.",
+                        "Most drivers have been friendly and respectful.",
+                        "Had an incredible experience with my driver.",
+                        "Drivers don't follow app protocol."
+                    ],
+                    "sentiments": [
+                        "HAPPY",
+                        "GRATEFUL"
+                    ]
+                }
+            ]
+        },
+        {
+            "appId": "com.grabtaxi.passenger",
+            "insights": [
+                {
+                    "title": "Customer Service Complaints",
+                    "amount": 6,
+                    "quotes": [
+                        "Customer service sucks.",
+                        "Live chat isn't helpful.",
+                        "No response from support.",
+                        "Poor service resolution process."
+                    ],
+                    "sentiments": [
+                        "ANGRY",
+                        "DISAPPOINTED"
+                    ]
+                },
+                {
+                    "title": "Driver Issues",
+                    "amount": 5,
+                    "quotes": [
+                        "Driver keeps cancelling.",
+                        "Many drivers are rude.",
+                        "Drivers are often late or don't follow routes.",
+                        "Driver's English was poor."
+                    ],
+                    "sentiments": [
+                        "FRUSTRATED",
+                        "DISAPPOINTED"
+                    ]
+                },
+                {
+                    "title": "Payment Problems",
+                    "amount": 4,
+                    "quotes": [
+                        "Top up issues with international cards.",
+                        "Payment method options are limited.",
+                        "Problem with money transfers.",
+                        "Payments were often charged incorrectly."
+                    ],
+                    "sentiments": [
+                        "ANGRY",
+                        "DISAPPOINTED"
+                    ]
+                }
+            ]
+        },
+        {
+            "appId": "com.cabify.rider",
+            "insights": [
+                {
+                    "title": "Poor App Usability",
+                    "amount": 8,
+                    "quotes": [
+                        "The app is terrible; it cannot register me.",
+                        "Customer support wasn't helpful.",
+                        "Navigating the app is complicated.",
+                        "App is buggy and needs improvement."
+                    ],
+                    "sentiments": [
+                        "ANGRY",
+                        "DISAPPOINTED"
+                    ]
+                },
+                {
+                    "title": "Inconsistent Driver Service",
+                    "amount": 5,
+                    "quotes": [
+                        "Driver's route was completely wrong.",
+                        "Drivers often don't follow app directions.",
+                        "Drivers cancel rides frequently.",
+                        "Lack of professionalism from drivers."
+                    ],
+                    "sentiments": [
+                        "FRUSTRATED",
+                        "DISAPPOINTED"
+                    ]
+                }
+            ]
+        }
+    ]
+}
