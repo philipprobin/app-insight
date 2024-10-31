@@ -1,11 +1,4 @@
 # calculate_similarity.py
-
-
-def set_openai_api_key():
-    openai.api_key = openai_key
-
-
-# calculate_similarity.py
 import json
 import openai
 import re
@@ -16,7 +9,7 @@ from utils.system_prompts import system_prompt
 from pathlib import Path
 
 
-def calculate_similarity(app_id, input_dir=Path("../competitors"), output_dir=Path("../ratings")):
+def calculate_similarity(app_id, input_dir=Path("competitors"), output_dir=Path("ratings")):
     """Calculates similarity scores for the latest app data."""
 
     openai.api_key = openai_key
@@ -28,8 +21,6 @@ def calculate_similarity(app_id, input_dir=Path("../competitors"), output_dir=Pa
         return
 
     app_descriptions = FileHandler.extract_titles_and_descriptions(full_data)
-
-    print(app_descriptions)
 
     try:
         response = openai.ChatCompletion.create(

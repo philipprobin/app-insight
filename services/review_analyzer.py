@@ -9,6 +9,7 @@ from utils.system_prompts import generate_insights_prompt
 from pathlib import Path
 from utils.cost_calculator import CostCalculator
 
+
 class ReviewAnalyzer:
     def __init__(self, app_id):
         self.app_id = app_id
@@ -16,8 +17,8 @@ class ReviewAnalyzer:
 
     def load_reviews(self):
         """Load reviews for the top 5 highest-rated competitors from latest /ratings and /competitors files."""
-        competitors_dir = Path("../competitors")
-        ratings_dir = Path("../ratings")
+        competitors_dir = Path("competitors")
+        ratings_dir = Path("ratings")
 
         # Load the latest ratings file for the app
         ratings_data = FileHandler.get_latest_json(ratings_dir, self.app_id)
@@ -37,6 +38,11 @@ class ReviewAnalyzer:
 
         # Extract reviews for top-rated competitors
         top_reviews = {}
+
+        # Add reference_app reviews
+        top_reviews[reviews_data["reference_app"]["app_id"]] = reviews_data["reference_app"]["reviews"]
+
+        # Add top competitors' reviews
         for comp in reviews_data["competitors"]:
             if comp["title"] in top_competitors:
                 top_reviews[comp["app_id"]] = comp["reviews"]
@@ -64,7 +70,7 @@ class ReviewAnalyzer:
                 model="gpt-4o-mini",
                 messages=messages,
                 temperature=1,
-                max_tokens=2048,
+                max_tokens=4096,  # increased token size
                 top_p=1,
                 frequency_penalty=0,
                 presence_penalty=0
@@ -86,17 +92,9 @@ class ReviewAnalyzer:
             insights_data = json.loads(json_str)
             return insights_data
         except Exception as e:
-            print("Failed to parse assistant's reply as JSON.")
+            print(f"Failed to parse assistant's reply as JSON. {e}")
             print("Assistant's reply:", assistant_reply)
             return None
-
-    def save_insights(self, insights_data):
-        """Save insights data to a JSON file."""
-        os.makedirs("../insights", exist_ok=True)
-        filename = f"insights/{self.app_id.replace('.', '_')}.json"
-        with open(filename, 'w', encoding='utf-8') as f:
-            json.dump(insights_data, f, ensure_ascii=False, indent=4)
-        print(f"Insights saved to '{filename}'.")
 
     def analyze(self):
         """Load reviews, generate insights, and save the results."""
@@ -104,4 +102,7 @@ class ReviewAnalyzer:
         if reviews_data:
             insights_data = self.generate_insights(reviews_data)
             if insights_data:
-                self.save_insights(insights_data)
+                insights_dir = Path("insights")
+                # Use FileHandler to save without replacing dots
+                FileHandler.save_json(insights_data, insights_dir, self.app_id)
+                print(f"Insights saved to '{insights_dir}/{self.app_id}.json'.")

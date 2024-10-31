@@ -2,11 +2,11 @@
 from services.fetch_apps import fetch_apps
 from services.calculate_similarity import calculate_similarity
 from services.review_analyzer import ReviewAnalyzer
-
+from services.merge_data import merge_app_data
 
 def main():
-    app_id = "de.sparmahl"
-    search_term = "SparMahl"
+    app_id = "com.instagram.android"
+    search_term = "Instagram"
     region = "de"
     num_results = 10
 
@@ -19,6 +19,9 @@ def main():
     # Step 3: Analyze reviews and save insights to /insights
     analyzer = ReviewAnalyzer(app_id)
     analyzer.analyze()
+
+    # Step 4: Merge data from /competitors and /insights, save to /analysis_result
+    merge_app_data(app_id)
 
 if __name__ == '__main__':
     main()
