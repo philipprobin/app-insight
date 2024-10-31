@@ -1,7 +1,7 @@
 import json
 import re
 import os
-from apikey import openai_key  # Make sure your API key is correctly imported
+from api_key import openai_key  # Make sure your API key is correctly imported
 import openai
 
 # Pricing constants
