@@ -1,9 +1,11 @@
-# fetch_apps.py
 import requests
 from bs4 import BeautifulSoup
-from google_play_scraper import app as get_app_details
+from google_play_scraper import app as get_app_details, reviews as get_app_reviews, Sort
 import re
 from pathlib import Path
+
+from langdetect import detect
+
 from utils.file_handler import FileHandler
 
 def clean_description(description):
@@ -12,8 +14,52 @@ def clean_description(description):
     description = ' '.join(description.split())  # Remove extra whitespace
     return description
 
+
+from google_play_scraper import reviews as get_app_reviews, Sort
+from langdetect import detect
+
+def fetch_reviews(app_id, max_reviews=200, region="us"):
+    """Fetch up to max_reviews English reviews for a specific app."""
+    review_data = []
+    batch_size = 100  # Number of reviews to fetch per batch
+    start = 0  # Initial starting index for fetching reviews
+
+    while len(review_data) < max_reviews:
+        try:
+            # Fetch a batch of reviews
+            result, _ = get_app_reviews(
+                app_id,
+                lang="en" if region.lower() == "us" else "de",
+                country=region,
+                count=batch_size,
+                sort=Sort.NEWEST
+            )
+            if not result:
+                break  # Break if no more reviews are available
+
+            for review in result:
+                content = review["content"]
+                try:
+                    # Only add reviews detected as English
+                    if detect(content) == 'en':
+                        review_data.append(content)
+                        # Stop if we've reached the max desired reviews
+                        if len(review_data) >= max_reviews:
+                            break
+                except:
+                    continue  # Skip if language detection fails
+
+            start += batch_size  # Update start index for the next batch
+
+        except Exception as e:
+            print(f"Failed to fetch reviews for app ID {app_id}: {e}")
+            break  # Exit the loop on failure
+
+    return review_data[:max_reviews]
+
+
 def fetch_apps(search_term, app_id, region="us", num_results=10, save_dir=Path("./competitors")):
-    """Fetches apps data and saves to JSON."""
+    """Fetches apps data including up to 200 reviews and saves to JSON."""
     hl, gl = ("de", "DE") if region.lower() == "de" else ("en", "US")
     search_term_formatted = search_term.replace(" ", "%20")
     url = f"https://play.google.com/store/search?q={search_term_formatted}&c=apps&hl={hl}&gl={gl}"
@@ -32,7 +78,7 @@ def fetch_apps(search_term, app_id, region="us", num_results=10, save_dir=Path("
         app_details = get_app_details(app_id)
         reference_app_data = {
             "inAppProductPrice": app_details.get('inAppProductPrice', "N/A"),
-            "reviews": app_details.get('reviews', "No reviews"),
+            "reviews": fetch_reviews(app_id, max_reviews=200, region=region),
             "ratings": app_details.get('score', "No rating"),
             "installs": app_details.get('installs', "Unknown installs"),
             "title": app_details['title'],
@@ -49,7 +95,7 @@ def fetch_apps(search_term, app_id, region="us", num_results=10, save_dir=Path("
     for idx, app in enumerate(soup.find_all('a', class_='Si6A0c Gy4nib'), start=1):
         if idx > num_results:
             break
-        title = app.find('span', class_='DdYX5').text if app.find('span', class_='DdYX5') else None
+        title = app.find('span', class_='DdYX5').text if app.find('span', 'DdYX5') else None
         link = "https://play.google.com" + app['href'] if app.has_attr('href') else None
         package_name = link.split("id=")[-1] if link else None
 
@@ -58,7 +104,7 @@ def fetch_apps(search_term, app_id, region="us", num_results=10, save_dir=Path("
                 app_details = get_app_details(package_name)
                 competitor_info = {
                     "inAppProductPrice": app_details.get('inAppProductPrice', "N/A"),
-                    "reviews": app_details.get('reviews', "No reviews"),
+                    "reviews": fetch_reviews(package_name, max_reviews=200, region=region),
                     "ratings": app_details.get('score', "No rating"),
                     "installs": app_details.get('installs', "Unknown installs"),
                     "title": title,
@@ -67,9 +113,11 @@ def fetch_apps(search_term, app_id, region="us", num_results=10, save_dir=Path("
                     "app_id": package_name
                 }
                 competitors_data.append(competitor_info)
+                print(f"Fetched data for competitor app '{title}'.")
             except Exception as e:
                 print(f"Failed to fetch data for {title}: {e}")
 
     all_apps_data = {"reference_app": reference_app_data, "competitors": competitors_data}
     FileHandler.save_json(all_apps_data, save_dir, app_id)
     print(f"Apps data saved for '{app_id}' in '{save_dir}'.")
+

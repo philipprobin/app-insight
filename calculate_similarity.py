@@ -13,14 +13,31 @@ def set_openai_api_key():
     openai.api_key = openai_key
 
 
+# calculate_similarity.py
+import json
+import openai
+import re
+from api_key import openai_key
+from utils.cost_calculator import CostCalculator
+from utils.file_handler import FileHandler
+from system_prompts import system_prompt
+from pathlib import Path
+
+
 def calculate_similarity(app_id, input_dir=Path("./competitors"), output_dir=Path("./ratings")):
     """Calculates similarity scores for the latest app data."""
-    set_openai_api_key()
 
-    app_descriptions = FileHandler.get_latest_json(input_dir, app_id)
-    if app_descriptions is None:
+    openai.api_key = openai_key
+
+    # Load the full data and extract only titles and descriptions
+    full_data = FileHandler.get_latest_json(input_dir, app_id)
+    if full_data is None:
         print("No app descriptions found.")
         return
+
+    app_descriptions = FileHandler.extract_titles_and_descriptions(full_data)
+
+    print(app_descriptions)
 
     try:
         response = openai.ChatCompletion.create(
@@ -36,7 +53,7 @@ def calculate_similarity(app_id, input_dir=Path("./competitors"), output_dir=Pat
         return
 
     assistant_reply = response['choices'][0]['message']['content']
-    json_str = re.search(r'\{.*\}', assistant_reply, re.DOTALL).group(0)
+    json_str = re.search(r'\{.*}', assistant_reply, re.DOTALL).group(0)
     similarity_scores = json.loads(json_str)
 
     # Calculate and save cost information
