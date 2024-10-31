@@ -5,7 +5,7 @@ import json
 import re
 import openai
 from utils.file_handler import FileHandler
-from system_prompts import generate_insights_prompt
+from utils.system_prompts import generate_insights_prompt
 from pathlib import Path
 from utils.cost_calculator import CostCalculator
 
@@ -16,8 +16,8 @@ class ReviewAnalyzer:
 
     def load_reviews(self):
         """Load reviews for the top 5 highest-rated competitors from latest /ratings and /competitors files."""
-        competitors_dir = Path("./competitors")
-        ratings_dir = Path("./ratings")
+        competitors_dir = Path("../competitors")
+        ratings_dir = Path("../ratings")
 
         # Load the latest ratings file for the app
         ratings_data = FileHandler.get_latest_json(ratings_dir, self.app_id)
@@ -78,7 +78,7 @@ class ReviewAnalyzer:
         input_tokens = response['usage']['prompt_tokens']
         output_tokens = response['usage']['completion_tokens']
         total_cost = CostCalculator.calculate_api_cost(input_tokens, output_tokens)
-        print(f"Total cost for this request: ${total_cost:.4f}")
+        print(f"INSIGHT COST: ${total_cost:.4f}")
 
         # Parse JSON from assistant's reply
         try:
@@ -92,7 +92,7 @@ class ReviewAnalyzer:
 
     def save_insights(self, insights_data):
         """Save insights data to a JSON file."""
-        os.makedirs("insights", exist_ok=True)
+        os.makedirs("../insights", exist_ok=True)
         filename = f"insights/{self.app_id.replace('.', '_')}.json"
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump(insights_data, f, ensure_ascii=False, indent=4)

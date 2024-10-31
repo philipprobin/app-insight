@@ -1,12 +1,4 @@
 # calculate_similarity.py
-import json
-import openai
-import re
-from api_key import openai_key
-from utils.cost_calculator import CostCalculator
-from utils.file_handler import FileHandler
-from system_prompts import system_prompt
-from pathlib import Path
 
 
 def set_openai_api_key():
@@ -20,11 +12,11 @@ import re
 from api_key import openai_key
 from utils.cost_calculator import CostCalculator
 from utils.file_handler import FileHandler
-from system_prompts import system_prompt
+from utils.system_prompts import system_prompt
 from pathlib import Path
 
 
-def calculate_similarity(app_id, input_dir=Path("./competitors"), output_dir=Path("./ratings")):
+def calculate_similarity(app_id, input_dir=Path("../competitors"), output_dir=Path("../ratings")):
     """Calculates similarity scores for the latest app data."""
 
     openai.api_key = openai_key
@@ -59,7 +51,7 @@ def calculate_similarity(app_id, input_dir=Path("./competitors"), output_dir=Pat
     # Calculate and save cost information
     input_tokens, output_tokens = response['usage']['prompt_tokens'], response['usage']['completion_tokens']
     total_cost = CostCalculator.calculate_api_cost(input_tokens, output_tokens)
-    print(f"Total cost: ${total_cost:.4f}")
+    print(f"SIMILARITY COST: ${total_cost:.4f}")
 
     output_path = FileHandler.save_json(similarity_scores, output_dir, app_id)
     print(f"Similarity scores saved to '{output_path}'")

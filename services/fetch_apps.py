@@ -18,30 +18,42 @@ def clean_description(description):
 from google_play_scraper import reviews as get_app_reviews, Sort
 from langdetect import detect
 
+from google_play_scraper import reviews as get_app_reviews, Sort
+from langdetect import detect
+
+
 def fetch_reviews(app_id, max_reviews=200, region="us"):
     """Fetch up to max_reviews English reviews for a specific app."""
     review_data = []
     batch_size = 100  # Number of reviews to fetch per batch
-    start = 0  # Initial starting index for fetching reviews
+    batch_number = 1  # Track the current batch number
+    lang = "en" if region.lower() == "us" else "de"
 
     while len(review_data) < max_reviews:
         try:
             # Fetch a batch of reviews
             result, _ = get_app_reviews(
                 app_id,
-                lang="en" if region.lower() == "us" else "de",
+                lang=lang,
                 country=region,
                 count=batch_size,
                 sort=Sort.NEWEST
             )
-            if not result:
+
+            # Check if fewer reviews are returned than requested, indicating no more reviews available
+            if not result or len(result) < batch_size:
+                print(f"No more reviews available after batch {batch_number}.")
                 break  # Break if no more reviews are available
+
+            # Print status of the current batch
+            print(
+                f"Processing batch {batch_number} for app ID {app_id} - {len(review_data)} {lang} reviews collected so far")
 
             for review in result:
                 content = review["content"]
                 try:
-                    # Only add reviews detected as English
-                    if detect(content) == 'en':
+                    # Only add reviews detected as the specified language
+                    if detect(content) == lang:
                         review_data.append(content)
                         # Stop if we've reached the max desired reviews
                         if len(review_data) >= max_reviews:
@@ -49,16 +61,17 @@ def fetch_reviews(app_id, max_reviews=200, region="us"):
                 except:
                     continue  # Skip if language detection fails
 
-            start += batch_size  # Update start index for the next batch
+            batch_number += 1  # Increment batch number for tracking
 
         except Exception as e:
-            print(f"Failed to fetch reviews for app ID {app_id}: {e}")
+            print(f"Failed to fetch reviews for app ID {app_id} in batch {batch_number}: {e}")
             break  # Exit the loop on failure
 
+    print(f"Finished fetching reviews for app ID {app_id} - Total {lang} reviews collected: {len(review_data)}")
     return review_data[:max_reviews]
 
 
-def fetch_apps(search_term, app_id, region="us", num_results=10, save_dir=Path("./competitors")):
+def fetch_apps(search_term, app_id, region="us", num_results=10, save_dir=Path("../competitors")):
     """Fetches apps data including up to 200 reviews and saves to JSON."""
     hl, gl = ("de", "DE") if region.lower() == "de" else ("en", "US")
     search_term_formatted = search_term.replace(" ", "%20")

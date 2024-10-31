@@ -28,7 +28,7 @@ generate_insights_prompt = {
             "and suggestions for improvement. For each insight, provide:\n"
             "1. A title summarizing the issue or positive aspect.\n"
             "2. The number of users mentioning this issue.\n"
-            "3. Four representative quotes from users about this issue.\n"
+            "3. All Representative quotes from users about this issue.\n"
             "4. Sentiments associated with the issue using one of the following enums:\n\n"
             "    SATISFIED, DISSATISFIED, HAPPY, ANGRY, EXCITED, DISAPPOINTED, SURPRISED, FRUSTRATED, GRATEFUL,\n"
             "    CONFUSED, RELIEVED, AMAZED, UNSURE, IMPRESSED, DISGUSTED, APPRECIATIVE, NEUTRAL, ENTHUSIASTIC, SAD,\n"
