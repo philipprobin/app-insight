@@ -59,19 +59,8 @@ def fetch_reviews(app_id, max_reviews=200, region="us"):
     return review_data[:max_reviews]
 
 
-def fetch_apps(search_term, app_id, region="us", num_results=10, save_dir=Path("competitors")):
-    """Fetches apps data including up to 200 reviews and saves to JSON."""
-    hl, gl = ("de", "DE") if region.lower() == "de" else ("en", "US")
-    search_term_formatted = search_term.replace(" ", "%20")
-    url = f"https://play.google.com/store/search?q={search_term_formatted}&c=apps&hl={hl}&gl={gl}"
-
-    headers = {"User-Agent": "Mozilla/5.0"}
-    response = requests.get(url, headers=headers)
-    if response.status_code != 200:
-        print("Failed to retrieve the page.")
-        return {}
-
-    soup = BeautifulSoup(response.text, 'html.parser')
+def fetch_apps(app_id, region="us", num_results=10, save_dir=Path("competitors")):
+    """Fetch app details and reviews for a reference app and its competitors."""
     reference_app_data = {}
 
     # Fetch reference app details
@@ -91,6 +80,21 @@ def fetch_apps(search_term, app_id, region="us", num_results=10, save_dir=Path("
         print(f"Fetched details for app ID {app_id}.")
     except Exception as e:
         print(f"Failed to fetch details for app ID {app_id}: {e}")
+
+    search_term = reference_app_data["title"]
+
+    """Fetches apps data including up to 200 reviews and saves to JSON."""
+    hl, gl = ("de", "DE") if region.lower() == "de" else ("en", "US")
+    search_term_formatted = search_term.replace(" ", "%20")
+    url = f"https://play.google.com/store/search?q={search_term_formatted}&c=apps&hl={hl}&gl={gl}"
+
+    headers = {"User-Agent": "Mozilla/5.0"}
+    response = requests.get(url, headers=headers)
+    if response.status_code != 200:
+        print("Failed to retrieve the page.")
+        return {}
+
+    soup = BeautifulSoup(response.text, 'html.parser')
 
     # Collect competitor apps
     competitors_data = []

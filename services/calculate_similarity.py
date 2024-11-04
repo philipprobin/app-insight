@@ -1,8 +1,9 @@
 # calculate_similarity.py
 import json
+import os
+
 import openai
 import re
-from api_key import openai_key
 from utils.cost_calculator import CostCalculator
 from utils.file_handler import FileHandler
 from utils.system_prompts import system_prompt
@@ -12,7 +13,7 @@ from pathlib import Path
 def calculate_similarity(app_id, input_dir=Path("competitors"), output_dir=Path("ratings")):
     """Calculates similarity scores for the latest app data."""
 
-    openai.api_key = openai_key
+    openai.api_key = os.getenv("OPENAI_API_KEY")
 
     # Load the full data and extract only titles and descriptions
     full_data = FileHandler.get_latest_json(input_dir, app_id)

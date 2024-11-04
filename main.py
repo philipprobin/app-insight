@@ -4,14 +4,14 @@ from services.calculate_similarity import calculate_similarity
 from services.review_analyzer import ReviewAnalyzer
 from services.merge_data import merge_app_data
 
+
 def main():
     app_id = "com.instagram.android"
-    search_term = "Instagram"
     region = "de"
     num_results = 10
 
     # Step 1: Fetch app data and save it to /competitors
-    fetch_apps(search_term, app_id, region=region, num_results=num_results)
+    fetch_apps(app_id, region=region, num_results=num_results)
 
     # Step 2: Calculate similarity scores and save to /ratings
     calculate_similarity(app_id)
@@ -21,7 +21,8 @@ def main():
     analyzer.analyze()
 
     # Step 4: Merge data from /competitors and /insights, save to /analysis_result
-    merge_app_data(app_id)
+    result: dict = merge_app_data(app_id)
+
 
 if __name__ == '__main__':
     main()

@@ -13,7 +13,8 @@ from utils.cost_calculator import CostCalculator
 class ReviewAnalyzer:
     def __init__(self, app_id):
         self.app_id = app_id
-        openai.api_key = os.getenv("OPENAI_API_KEY")
+
+    openai.api_key = os.getenv("OPENAI_API_KEY")
 
     def load_reviews(self):
         """Load reviews for the top 5 highest-rated competitors from latest /ratings and /competitors files."""

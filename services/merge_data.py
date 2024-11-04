@@ -47,3 +47,4 @@ def merge_app_data(app_id):
     # Save the merged data to the analysis_result directory
     FileHandler.save_json(merged_data, analysis_result_dir, app_id)
     print(f"Analysis result saved to '{analysis_result_dir}/{app_id}.json'.")
+    return merged_data
