@@ -6,14 +6,6 @@ from pathlib import Path
 from langdetect import detect
 from utils.file_handler import FileHandler
 
-
-def clean_description(description):
-    description = re.sub(r'<.*?>', '', description)  # Remove HTML tags
-    description = re.sub(r'http\S+|www\S+', '', description)  # Remove links
-    description = ' '.join(description.split())  # Remove extra whitespace
-    return description
-
-
 def fetch_reviews(app_id, max_reviews=200, region="us"):
     """Fetch up to max_reviews English reviews for a specific app."""
     review_data = []
@@ -72,7 +64,7 @@ def fetch_apps(app_id, region="us", num_results=10, save_dir=Path("competitors")
             "ratings": app_details.get('score', "No rating"),
             "installs": app_details.get('installs', "Unknown installs"),
             "title": app_details['title'],
-            "description": clean_description(app_details.get('description', 'Description not found')),
+            "description": app_details.get('description', 'Description not found'),
             "genre": app_details.get('genre', 'Genre not found'),
             "app_id": app_id,
             "icon_url": app_details.get("icon"),  # Directly get icon URL from app details
@@ -115,7 +107,7 @@ def fetch_apps(app_id, region="us", num_results=10, save_dir=Path("competitors")
                     "ratings": app_details.get('score', "No rating"),
                     "installs": app_details.get('installs', "Unknown installs"),
                     "title": title,
-                    "description": clean_description(app_details.get('description', 'Description not found')),
+                    "description": app_details.get('description', 'Description not found'),
                     "genre": app_details.get('genre', 'Genre not found'),
                     "app_id": package_name,
                     "icon_url": icon_url  # Add icon URL for the competitor

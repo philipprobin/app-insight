@@ -16,7 +16,7 @@ class ReviewAnalyzer:
 
     openai.api_key = os.getenv("OPENAI_API_KEY")
 
-    def load_reviews(self):
+    def load_reviews(self, amount=5):
         """Load reviews for the top 5 highest-rated competitors from latest /ratings and /competitors files."""
         competitors_dir = Path("competitors")
         ratings_dir = Path("ratings")
@@ -28,7 +28,7 @@ class ReviewAnalyzer:
             return None
 
         # Sort competitors by rating in descending order and select top 5
-        sorted_competitors = sorted(ratings_data.items(), key=lambda x: x[1], reverse=True)[:5]
+        sorted_competitors = sorted(ratings_data.items(), key=lambda x: x[1], reverse=True)[:amount]
         top_competitors = [comp[0] for comp in sorted_competitors]  # Extract only app names
 
         # Load the latest competitors file for the app
@@ -97,9 +97,9 @@ class ReviewAnalyzer:
             print("Assistant's reply:", assistant_reply)
             return None
 
-    def analyze(self):
+    def analyze(self, amount: int):
         """Load reviews, generate insights, and save the results."""
-        reviews_data = self.load_reviews()
+        reviews_data = self.load_reviews(amount)
         if reviews_data:
             insights_data = self.generate_insights(reviews_data)
             if insights_data:

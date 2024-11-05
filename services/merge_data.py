@@ -2,6 +2,7 @@
 from pathlib import Path
 from utils.file_handler import FileHandler
 
+
 def merge_app_data(app_id):
     """Merge competitor data and insights for a given app ID into a single file."""
     competitors_dir = Path("competitors")
@@ -27,7 +28,11 @@ def merge_app_data(app_id):
 
     # Find insights for the reference app and competitors
     reference_app_insights = next((app for app in insights_data.get("apps", []) if app["appId"] == app_id), None)
-    competitor_insights = {app["appId"]: app.get("insights", []) for app in insights_data.get("apps", [])}
+    competitor_insights = {
+        app["appId"]: app["insights"]
+        for app in insights_data.get("apps", [])
+        if app.get("insights")  # This checks that insights is not empty
+    }
 
     # Merge insights into reference app
     merged_data = {
@@ -38,11 +43,14 @@ def merge_app_data(app_id):
         "competitors": []
     }
 
-    # Merge insights into each competitor if available
+    # Merge insights into each competitor if available, and only include competitors with non-empty insights
     for competitor in competitors_data["competitors"]:
         competitor_id = competitor["app_id"]
-        competitor["insights"] = competitor_insights.get(competitor_id, [])
-        merged_data["competitors"].append(competitor)
+        insights = competitor_insights.get(competitor_id, [])
+
+        if insights:  # Only include competitors with non-empty insights
+            competitor["insights"] = insights
+            merged_data["competitors"].append(competitor)
 
     # Save the merged data to the analysis_result directory
     FileHandler.save_json(merged_data, analysis_result_dir, app_id)
